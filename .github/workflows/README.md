@@ -59,7 +59,7 @@ First, install dependencies with vcpkg:
 ```powershell
 git clone https://github.com/microsoft/vcpkg.git
 .\vcpkg\bootstrap-vcpkg.bat
-.\vcpkg\vcpkg install zlib:x64-windows-static bzip2:x64-windows-static libpng:x64-windows-static brotli:x64-windows-static pkgconf:x64-windows-static
+.\vcpkg\vcpkg install zlib:x64-windows-static bzip2:x64-windows-static libpng:x64-windows-static brotli:x64-windows-static
 ```
 
 Then build FreeType:
@@ -84,7 +84,7 @@ cmake --build build --config Release
 **Notes**: 
 - The toolchain file must be specified with `-DCMAKE_TOOLCHAIN_FILE` (no space after `-D`)
 - The vcpkg triplet is set via the `VCPKG_DEFAULT_TRIPLET` environment variable
-- `pkgconf` is included to eliminate CMake warnings about missing pkg-config
+- You may see a harmless warning "Could NOT find PkgConfig" - this is safe to ignore
 - If you get build errors, clear the CMake cache: `rm -r build` and reconfigure
 
 ### Linux
