@@ -32,14 +32,19 @@ jobs:
     - name: Configure CMake
       run: |
         $vcpkgTriplet = if ("${{ matrix.arch }}" -eq "x64") { "x64-windows-static" } else { "x86-windows-static" }
+        $vcpkgRoot = Join-Path $PWD "vcpkg"
+        $toolchainFile = Join-Path $vcpkgRoot "scripts\buildsystems\vcpkg.cmake"
         $env:VCPKG_DEFAULT_TRIPLET = $vcpkgTriplet
+        Write-Host "Using vcpkg toolchain: $toolchainFile"
+        Write-Host "Using triplet: $vcpkgTriplet"
         cmake -B build `
           -G "Visual Studio 17 2022" `
           -A ${{ matrix.arch == 'x64' && 'x64' || 'Win32' }} `
-          -DCMAKE_TOOLCHAIN_FILE="$PWD/vcpkg/scripts/buildsystems/vcpkg.cmake" `
+          -DCMAKE_TOOLCHAIN_FILE="$toolchainFile" `
+          -DVCPKG_TARGET_TRIPLET=$vcpkgTriplet `
           -DBUILD_SHARED_LIBS=ON `
           -DCMAKE_BUILD_TYPE=Release `
-          -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded" `
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded `
           -DFT_REQUIRE_ZLIB=TRUE `
           -DFT_REQUIRE_BZIP2=TRUE `
           -DFT_REQUIRE_PNG=TRUE `
