@@ -23,7 +23,7 @@ jobs:
         .\vcpkg\bootstrap-vcpkg.bat
         $vcpkgTriplet = if ("${{ matrix.arch }}" -eq "x64") { "x64-windows-static" } else { "x86-windows-static" }
         $env:VCPKG_ROOT = "${{ github.workspace }}\vcpkg"
-        .\vcpkg\vcpkg install zlib:$vcpkgTriplet bzip2:$vcpkgTriplet libpng:$vcpkgTriplet
+        .\vcpkg\vcpkg install zlib:$vcpkgTriplet bzip2:$vcpkgTriplet libpng:$vcpkgTriplet brotli:$vcpkgTriplet
         .\vcpkg\vcpkg list
     
     - name: Setup MSVC
@@ -47,7 +47,7 @@ jobs:
           -DFT_REQUIRE_ZLIB=TRUE `
           -DFT_REQUIRE_BZIP2=TRUE `
           -DFT_REQUIRE_PNG=TRUE `
-          -DFT_DISABLE_BROTLI=TRUE `
+          -DFT_REQUIRE_BROTLI=TRUE `
           -DFT_DISABLE_HARFBUZZ=TRUE
     
     - name: Build

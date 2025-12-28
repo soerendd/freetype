@@ -29,7 +29,7 @@ With static linking, the binaries include support for:
 - ✅ **zlib**: Gzip-compressed font data
 - ✅ **bzip2**: BZip2-compressed fonts
 - ✅ **PNG**: PNG-compressed embedded bitmaps (color emoji fonts)
-- ❌ **Brotli/WOFF2**: Disabled (web fonts, rarely needed for desktop apps)
+- ✅ **Brotli**: WOFF2 web font format support
 - ❌ **HarfBuzz**: Disabled (can be enabled if needed for advanced text shaping)
 
 ## Usage
@@ -59,7 +59,7 @@ First, install dependencies with vcpkg:
 ```powershell
 git clone https://github.com/microsoft/vcpkg.git
 .\vcpkg\bootstrap-vcpkg.bat
-.\vcpkg\vcpkg install zlib:x64-windows-static bzip2:x64-windows-static libpng:x64-windows-static
+.\vcpkg\vcpkg install zlib:x64-windows-static bzip2:x64-windows-static libpng:x64-windows-static brotli:x64-windows-static
 ```
 
 Then build FreeType:
@@ -75,7 +75,7 @@ cmake -B build -G "Visual Studio 17 2022" -A x64 `
   -DFT_REQUIRE_ZLIB=TRUE `
   -DFT_REQUIRE_BZIP2=TRUE `
   -DFT_REQUIRE_PNG=TRUE `
-  -DFT_DISABLE_BROTLI=TRUE `
+  -DFT_REQUIRE_BROTLI=TRUE `
   -DFT_DISABLE_HARFBUZZ=TRUE
 
 cmake --build build --config Release
