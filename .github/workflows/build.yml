@@ -103,9 +103,9 @@ jobs:
         cd ..
         
         # Build libpng (needs zlib)
-        wget https://download.sourceforge.net/libpng/libpng-1.6.44.tar.gz
-        tar xzf libpng-1.6.44.tar.gz
-        cd libpng-1.6.44
+        wget https://download.sourceforge.net/libpng/libpng-1.6.53.tar.gz
+        tar xzf libpng-1.6.53.tar.gz
+        cd libpng-1.6.53
         export PKG_CONFIG_PATH=$PWD/../../build-deps/lib/pkgconfig:$PKG_CONFIG_PATH
         ./configure --prefix=$PWD/../../build-deps --enable-shared=no --enable-static=yes \
           CPPFLAGS="-I$PWD/../../build-deps/include" \
@@ -116,7 +116,7 @@ jobs:
         cd ..
         
         # Build brotli
-        git clone --depth 1 --branch v1.1.0 https://github.com/google/brotli.git
+        git clone --depth 1 --branch v1.2.0 https://github.com/google/brotli.git
         cd brotli
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release \
