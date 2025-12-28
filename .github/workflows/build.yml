@@ -19,13 +19,11 @@ jobs:
     
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
     
     - name: Install dependencies with vcpkg
       run: |
         $vcpkgTriplet = if ("${{ matrix.arch }}" -eq "x64") { "x64-windows-static" } else { "x86-windows-static" }
-        vcpkg install zlib:$vcpkgTriplet bzip2:$vcpkgTriplet libpng:$vcpkgTriplet brotli:$vcpkgTriplet
+        vcpkg install zlib:$vcpkgTriplet bzip2:$vcpkgTriplet libpng:$vcpkgTriplet brotli:$vcpkgTriplet --overlay-ports="${{ github.workspace }}/.github/vcpkg-ports"
         vcpkg list
     
     - name: Setup MSVC
