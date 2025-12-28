@@ -76,9 +76,14 @@ jobs:
           -DFT_DISABLE_HARFBUZZ=TRUE
         Write-Host "`nCMake configuration completed. Checking CMakeCache for package detection:"
         Get-Content build\CMakeCache.txt | Select-String -Pattern "ZLIB|PNG|BROTLI|BZIP"
+        Write-Host "`nChecking for *_FOUND variables:"
+        Get-Content build\CMakeCache.txt | Select-String -Pattern "_FOUND:BOOL"
     
     - name: Build
-      run: cmake --build build
+      run: |
+        cmake --build build --verbose 2>&1 | Tee-Object -FilePath build_log.txt
+        Write-Host "`nSearching for link command with freetype.dll:"
+        Get-Content build_log.txt | Select-String -Pattern "freetype.dll" -Context 0,2
     
     - name: Verify DLL dependencies
       run: |
