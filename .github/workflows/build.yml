@@ -56,7 +56,12 @@ jobs:
         Write-Host "Using triplet: $vcpkgTriplet"
         Write-Host "Using prefix path: $prefixPath"
         Write-Host "Using toolchain: $toolchainFile"
+        Write-Host "`nChecking if vcpkg packages are available:"
+        Test-Path "$prefixPath\lib\zlib.lib"
+        Test-Path "$prefixPath\lib\brotlidec.lib"
+        Test-Path "$prefixPath\lib\libpng16.lib"
         cmake -B build -G Ninja `
+          --debug-find `
           -DCMAKE_C_COMPILER=cl `
           -DCMAKE_CXX_COMPILER=cl `
           -DCMAKE_PREFIX_PATH="$prefixPath" `
@@ -69,6 +74,8 @@ jobs:
           -DFT_REQUIRE_PNG=TRUE `
           -DFT_REQUIRE_BROTLI=TRUE `
           -DFT_DISABLE_HARFBUZZ=TRUE
+        Write-Host "`nCMake configuration completed. Checking CMakeCache for package detection:"
+        Get-Content build\CMakeCache.txt | Select-String -Pattern "ZLIB|PNG|BROTLI|BZIP"
     
     - name: Build
       run: cmake --build build
