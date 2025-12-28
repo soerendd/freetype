@@ -79,6 +79,12 @@ jobs:
         dumpbin /DEPENDENTS build\freetype.dll
         Write-Host "`nChecking for static runtime linkage..."
         dumpbin /DIRECTIVES build\freetype.dll | Select-String -Pattern "DEFAULTLIB"
+        Write-Host "`nChecking for Brotli symbols..."
+        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "Brotli" | Select-Object -First 10
+        Write-Host "`nChecking for zlib symbols..."
+        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "inflate|deflate" | Select-Object -First 5
+        Write-Host "`nChecking for PNG symbols..."
+        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "png_" | Select-Object -First 5
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
