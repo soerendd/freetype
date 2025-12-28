@@ -127,8 +127,11 @@ jobs:
         wget https://download.sourceforge.net/libpng/libpng-1.6.40.tar.gz
         tar xzf libpng-1.6.40.tar.gz
         cd libpng-1.6.40
+        export PKG_CONFIG_PATH=$PWD/../../build-deps/lib/pkgconfig:$PKG_CONFIG_PATH
         ./configure --prefix=$PWD/../../build-deps --enable-shared=no --enable-static=yes \
-          CFLAGS="-I$PWD/../../build-deps/include" LDFLAGS="-L$PWD/../../build-deps/lib"
+          CPPFLAGS="-I$PWD/../../build-deps/include" \
+          CFLAGS="-I$PWD/../../build-deps/include" \
+          LDFLAGS="-L$PWD/../../build-deps/lib"
         make -j$(nproc)
         make install
         cd ..
