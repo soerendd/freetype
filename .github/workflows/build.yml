@@ -110,7 +110,7 @@ jobs:
         wget https://zlib.net/zlib-1.3.1.tar.gz
         tar xzf zlib-1.3.1.tar.gz
         cd zlib-1.3.1
-        ./configure --prefix=$PWD/../../build-deps --static
+        CFLAGS="-fPIC -O2" ./configure --prefix=$PWD/../../build-deps --static
         make -j$(nproc)
         make install
         cd ..
@@ -130,7 +130,7 @@ jobs:
         export PKG_CONFIG_PATH=$PWD/../../build-deps/lib/pkgconfig:$PKG_CONFIG_PATH
         ./configure --prefix=$PWD/../../build-deps --enable-shared=no --enable-static=yes \
           CPPFLAGS="-I$PWD/../../build-deps/include" \
-          CFLAGS="-I$PWD/../../build-deps/include" \
+          CFLAGS="-fPIC -O2 -I$PWD/../../build-deps/include" \
           LDFLAGS="-L$PWD/../../build-deps/lib"
         make -j$(nproc)
         make install
