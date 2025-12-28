@@ -5,3 +5,15 @@ src/dlg/dlg.c
 subprojects/*
 !subprojects/*.wrap
 /tests/data/*
+
+# vcpkg dependency manager
+/vcpkg/
+
+# Local dependency builds
+/build-deps/
+/deps/
+
+# CMake build directories
+cmake-build-*/
+build-*/
+.idea
