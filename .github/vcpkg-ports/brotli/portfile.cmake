@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO google/brotli
     REF "v${VERSION}"
-    SHA512 7d7b25329a37c4ddb9155c7f30784f3fa6b877a2e09c038bf99b4089ba7da8ec77bcb7ef48276a4c9dd39bce7e4e696e4308e68f7f61ced59e9cfff3bb4e9921
+    SHA512 6eb280d10d8e1b43d22d00fa535435923c22ce8448709419d676ff47d4a644102ea04f488fc65a179c6c09fee12380992e9335bad8dfebd5d1f20908d10849d9
     HEAD_REF master
     PATCHES
         install.patch
