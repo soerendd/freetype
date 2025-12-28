@@ -37,6 +37,10 @@ jobs:
         $vcpkgTriplet = if ("${{ matrix.arch }}" -eq "x64") { "x64-windows-static" } else { "x86-windows-static" }
         $vcpkgRoot = "${{ github.workspace }}\vcpkg"
         $toolchainFile = "$vcpkgRoot\scripts\buildsystems\vcpkg.cmake"
+        # Override VCPKG_ROOT set by MSVC action
+        $env:VCPKG_ROOT = $vcpkgRoot
+        Write-Host "Using VCPKG_ROOT: $env:VCPKG_ROOT"
+        Write-Host "Using toolchain: $toolchainFile"
         cmake -B build `
           -G "Visual Studio 17 2022" `
           -A ${{ matrix.arch == 'x64' && 'x64' || 'Win32' }} `
