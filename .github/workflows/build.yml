@@ -32,16 +32,6 @@ jobs:
       with:
         arch: ${{ matrix.arch }}
     
-    - name: Verify vcpkg installation
-      run: |
-        $vcpkgTriplet = if ("${{ matrix.arch }}" -eq "x64") { "x64-windows-static" } else { "x86-windows-static" }
-        Write-Host "Checking vcpkg installed packages..."
-        Get-ChildItem "${{ github.workspace }}\vcpkg\installed\$vcpkgTriplet" -ErrorAction SilentlyContinue
-        Write-Host "`nChecking for lib files..."
-        Get-ChildItem "${{ github.workspace }}\vcpkg\installed\$vcpkgTriplet\lib" -ErrorAction SilentlyContinue
-        Write-Host "`nChecking for include files..."
-        Get-ChildItem "${{ github.workspace }}\vcpkg\installed\$vcpkgTriplet\include" -ErrorAction SilentlyContinue
-    
     - name: Configure CMake
       env:
         VCPKG_ROOT: ${{ github.workspace }}\vcpkg
@@ -52,16 +42,7 @@ jobs:
         $vcpkgRoot = "${{ github.workspace }}\vcpkg"
         $toolchainFile = "$vcpkgRoot\scripts\buildsystems\vcpkg.cmake"
         $prefixPath = "$vcpkgRoot\installed\$vcpkgTriplet"
-        Write-Host "Using VCPKG_ROOT: $env:VCPKG_ROOT"
-        Write-Host "Using triplet: $vcpkgTriplet"
-        Write-Host "Using prefix path: $prefixPath"
-        Write-Host "Using toolchain: $toolchainFile"
-        Write-Host "`nChecking if vcpkg packages are available:"
-        Test-Path "$prefixPath\lib\zlib.lib"
-        Test-Path "$prefixPath\lib\brotlidec.lib"
-        Test-Path "$prefixPath\lib\libpng16.lib"
         cmake -B build -G Ninja `
-          --debug-find `
           -DCMAKE_C_COMPILER=cl `
           -DCMAKE_CXX_COMPILER=cl `
           -DCMAKE_PREFIX_PATH="$prefixPath" `
@@ -74,29 +55,9 @@ jobs:
           -DFT_REQUIRE_PNG=TRUE `
           -DFT_REQUIRE_BROTLI=TRUE `
           -DFT_DISABLE_HARFBUZZ=TRUE
-        Write-Host "`nCMake configuration completed. Checking CMakeCache for package detection:"
-        Get-Content build\CMakeCache.txt | Select-String -Pattern "ZLIB|PNG|BROTLI|BZIP"
-        Write-Host "`nChecking for *_FOUND variables:"
-        Get-Content build\CMakeCache.txt | Select-String -Pattern "_FOUND:BOOL"
     
     - name: Build
-      run: |
-        cmake --build build --verbose 2>&1 | Tee-Object -FilePath build_log.txt
-        Write-Host "`nSearching for link command with freetype.dll:"
-        Get-Content build_log.txt | Select-String -Pattern "freetype.dll" -Context 0,2
-    
-    - name: Verify DLL dependencies
-      run: |
-        Write-Host "Checking DLL dependencies..."
-        dumpbin /DEPENDENTS build\freetype.dll
-        Write-Host "`nChecking for static runtime linkage..."
-        dumpbin /DIRECTIVES build\freetype.dll | Select-String -Pattern "DEFAULTLIB"
-        Write-Host "`nChecking for Brotli symbols..."
-        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "Brotli" | Select-Object -First 10
-        Write-Host "`nChecking for zlib symbols..."
-        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "inflate|deflate" | Select-Object -First 5
-        Write-Host "`nChecking for PNG symbols..."
-        dumpbin /SYMBOLS build\freetype.dll | Select-String -Pattern "png_" | Select-Object -First 5
+      run: cmake --build build
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
