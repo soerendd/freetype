@@ -159,20 +159,55 @@ jobs:
           build/include/freetype/config/*.h
         if-no-files-found: error
 
-  create-release:
+  pack-nuget:
     needs: [build-windows, build-linux]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: windows-latest
     
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Download all artifacts
       uses: actions/download-artifact@v4
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: |
-          freetype-windows-x64/*
-          freetype-windows-Win32/*
-          freetype-linux-x64/*
+        path: artifacts-download
+    
+    - name: Organize artifacts for NuGet
+      run: |
+        New-Item -ItemType Directory -Force -Path artifacts\windows-x64
+        New-Item -ItemType Directory -Force -Path artifacts\windows-x86
+        New-Item -ItemType Directory -Force -Path artifacts\linux-x64
+        
+        Copy-Item artifacts-download\freetype-windows-x64\*.dll artifacts\windows-x64\
+        Copy-Item artifacts-download\freetype-windows-x64\*.lib artifacts\windows-x64\
+        
+        Copy-Item artifacts-download\freetype-windows-Win32\*.dll artifacts\windows-x86\
+        Copy-Item artifacts-download\freetype-windows-Win32\*.lib artifacts\windows-x86\
+        
+        Copy-Item artifacts-download\freetype-linux-x64\libfreetype.so* artifacts\linux-x64\
+        
+        Get-ChildItem -Recurse artifacts
+    
+    - name: Pack NuGet package
+      run: |
+        $version = "2.13.3"
+        if ("${{ github.ref }}" -match "refs/tags/v(.+)") {
+          $version = $matches[1]
+        } elseif ("${{ github.ref }}" -eq "refs/heads/main" -or "${{ github.ref }}" -eq "refs/heads/master") {
+          $version = "$version-ci-${{ github.run_number }}"
+        } else {
+          $version = "$version-dev-${{ github.run_number }}"
+        }
+        Write-Host "Creating NuGet package version: $version"
+        nuget pack FreeType.Native.nuspec -Version $version -OutputDirectory nupkg
+    
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: nupkg/*.nupkg
+    
+    - name: Publish to NuGet
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        nuget push nupkg\*.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+      continue-on-error: true

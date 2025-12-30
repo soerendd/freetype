@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <!-- Windows x64 -->
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\freetype.dll" 
+          Condition="'$(RuntimeIdentifier)' == 'win-x64' OR ('$(RuntimeIdentifier)' == '' AND '$(Platform)' == 'x64' AND $([MSBuild]::IsOsPlatform('Windows')))">
+      <Link>freetype.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- Windows x86 -->
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x86\native\freetype.dll" 
+          Condition="'$(RuntimeIdentifier)' == 'win-x86' OR ('$(RuntimeIdentifier)' == '' AND '$(Platform)' == 'x86' AND $([MSBuild]::IsOsPlatform('Windows')))">
+      <Link>freetype.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
+    <!-- Linux x64 -->
+    <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libfreetype.so.6" 
+          Condition="'$(RuntimeIdentifier)' == 'linux-x64' OR ('$(RuntimeIdentifier)' == '' AND $([MSBuild]::IsOsPlatform('Linux')))">
+      <Link>libfreetype.so.6</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
