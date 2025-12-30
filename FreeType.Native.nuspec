@@ -17,7 +17,7 @@
   </metadata>
   <files>
     <!-- License and readme -->
-    <file src="LICENSE.TXT" target="" />
+    <file src="LICENSE.TXT" target="LICENSE.TXT" />
     <file src="README" target="README" />
     
     <!-- Build targets file -->
