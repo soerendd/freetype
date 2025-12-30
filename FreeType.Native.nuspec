@@ -13,12 +13,12 @@
     <copyright>Copyright © 1996-2025 David Turner, Robert Wilhelm, and Werner Lemberg</copyright>
     <tags>freetype native font truetype opentype dll native-library</tags>
     <repository type="git" url="https://github.com/freetype/freetype" />
-    <readme>README</readme>
+    <readme>README.md</readme>
   </metadata>
   <files>
     <!-- License and readme -->
     <file src="LICENSE.TXT" target="LICENSE.TXT" />
-    <file src="README" target="README" />
+    <file src="README.md" target="README.md" />
     
     <!-- Build targets file -->
     <file src="nuget\FreeType.Native.targets" target="build\FreeType.Native.targets" />
