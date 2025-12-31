@@ -194,7 +194,7 @@ jobs:
         # NuGet requires .md extension for readme
         Copy-Item README README.md
         
-        $version = "2.13.3"
+        $version = "2.14.1"
         if ("${{ github.ref }}" -match "refs/tags/v(.+)") {
           $version = $matches[1]
         } elseif ("${{ github.ref }}" -eq "refs/heads/main" -or "${{ github.ref }}" -eq "refs/heads/master") {
