@@ -116,11 +116,11 @@ jobs:
         make install
         cd ..
         
-        # Build bzip2
+        # Build bzip2 (needs explicit CC for cross-compilation)
         wget https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
         tar xzf bzip2-1.0.8.tar.gz
         cd bzip2-1.0.8
-        make -j$(nproc) CFLAGS="-fPIC -O2"
+        make -j$(nproc) CC="$CC" AR="$AR" RANLIB="$RANLIB" CFLAGS="-fPIC -O2"
         make install PREFIX=$PWD/../../build-deps
         cd ..
         
