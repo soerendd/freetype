@@ -120,7 +120,11 @@ jobs:
         wget https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
         tar xzf bzip2-1.0.8.tar.gz
         cd bzip2-1.0.8
-        make -j$(nproc) CC="$CC" AR="$AR" RANLIB="$RANLIB" CFLAGS="-fPIC -O2"
+        if [ "${{ matrix.arch }}" = "arm64" ]; then
+          make -j$(nproc) CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib CFLAGS="-fPIC -O2"
+        else
+          make -j$(nproc) CFLAGS="-fPIC -O2"
+        fi
         make install PREFIX=$PWD/../../build-deps
         cd ..
         
