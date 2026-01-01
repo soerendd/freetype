@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="file">LICENSE.TXT</license>
     <projectUrl>https://freetype.org/</projectUrl>
-    <description>Native FreeType libraries for Windows (x64, x86) and Linux (x64) with statically linked dependencies (zlib, bzip2, libpng, brotli). Automatically copies native DLLs to output directory for .NET applications.</description>
+    <description>Native FreeType libraries for Windows (x64, x86), Linux (x64, ARM64), and macOS (x64, ARM64/Apple Silicon) with statically linked dependencies (zlib, bzip2, libpng, brotli). Automatically copies native libraries to output directory for .NET applications.</description>
     <copyright>Copyright © 1996-2025 David Turner, Robert Wilhelm, and Werner Lemberg</copyright>
     <tags>freetype native font truetype opentype dll native-library</tags>
     <repository type="git" url="https://github.com/freetype/freetype" />
@@ -34,6 +34,15 @@
     
     <!-- Linux x64 -->
     <file src="artifacts\linux-x64\libfreetype.so.6" target="runtimes\linux-x64\native\libfreetype.so.6" />
+    
+    <!-- Linux ARM64 -->
+    <file src="artifacts\linux-arm64\libfreetype.so.6" target="runtimes\linux-arm64\native\libfreetype.so.6" />
+    
+    <!-- macOS x64 -->
+    <file src="artifacts\osx-x64\libfreetype.6.dylib" target="runtimes\osx-x64\native\libfreetype.6.dylib" />
+    
+    <!-- macOS ARM64 (Apple Silicon) -->
+    <file src="artifacts\osx-arm64\libfreetype.6.dylib" target="runtimes\osx-arm64\native\libfreetype.6.dylib" />
     
     <!-- Headers for native interop (optional) -->
     <file src="include\**\*.h" target="build\native\include" />
